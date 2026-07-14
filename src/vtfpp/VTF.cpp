@@ -1354,7 +1354,9 @@ bool VTF::setMipCount(uint8_t newMipCount) {
 		return false;
 	}
 
-	if (const auto maxMipCount = ImageDimensions::getMaximumMipCount(this->width, this->height, this->depth); (this->platform != PLATFORM_PC && newMipCount > 1) || (this->platform == PLATFORM_PC && newMipCount > maxMipCount)) {
+	if (newMipCount < 1) {
+		newMipCount = 1;
+	} else if (const auto maxMipCount = ImageDimensions::getMaximumMipCount(this->width, this->height, this->depth); (this->platform != PLATFORM_PC && newMipCount > 1) || (this->platform == PLATFORM_PC && newMipCount > maxMipCount)) {
 		newMipCount = maxMipCount;
 	}
 	this->regenerateImageData(this->format, this->width, this->height, newMipCount, this->frameCount, this->getFaceCount(), this->depth);
